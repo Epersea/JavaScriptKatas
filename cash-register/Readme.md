@@ -14,4 +14,4 @@ The function should return an object with two keys:
 - `change`: an array of change given, ordered from highest to lowest coin denomination.
 
 # Notes
-- This kata was tested against a suite of test found [here](https://gitlab.com/devscola/katasrunners/-/blob/master/ejercicios_basicos/4-cash-register/javascript/spec/cash_register.spec.js)
+- This kata was tested against a suite of tests found [here](https://gitlab.com/devscola/katasrunners/-/blob/master/ejercicios_basicos/4-cash-register/javascript/spec/cash_register.spec.js)

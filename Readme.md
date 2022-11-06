@@ -1,0 +1,1 @@
+This repo contains a series of katas in JavaScript. My main goals for these were adquiring more fluency in the language, practising test-driven development and implementing best practices regarding variable names and separation of concerns. Please see readme files in each kata for more details.

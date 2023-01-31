@@ -1,0 +1,88 @@
+class GameOfLife {
+    constructor(grid) {
+        this.grid = grid;
+        this.height = this.grid.length;
+        this.width = this.grid[0].length;
+        this.generation = 1;
+    }
+
+    calculateNextGen() {
+
+        if (this.hasSingleCell()) {
+            this.grid = [0];
+            return;
+        }
+        
+        const newGrid = this.createNewGrid();
+
+        this.grid = newGrid;
+        this.generation++;
+    }
+
+    hasSingleCell() {
+        return this.grid.flat().length === 1;
+    }
+
+    createNewGrid() {
+        const emptyGrid = this.createEmptyGrid();
+        const newGrid = this.fillGrid(emptyGrid);
+        return newGrid;
+    }
+
+    createEmptyGrid() {
+        let emptyGrid = new Array(this.height);
+        for (let column = 0; column < emptyGrid.length; column++) {
+            emptyGrid[column] = new Array(this.width);
+        }
+        return emptyGrid;
+    }
+
+    fillGrid(grid) {
+        for (let row = 0; row < this.height; row++) {
+            for (let column = 0; column < this.width; column++) {
+                grid[row][column] = this.generateNewCell(row, column);
+            }
+        }
+        return grid;
+    }
+
+    generateNewCell(row, column) {
+        const currentCell = this.grid[row][column];
+        const liveNeighbours = this.calculateLiveNeighbours(currentCell, row, column);
+        const newCell = this.deadOrAlive(currentCell, liveNeighbours);
+        return newCell;
+    }
+
+    calculateLiveNeighbours(cell, row, column) {
+        let liveNeighbours = 0;
+
+        for (let rowToCheck = row - 1; rowToCheck <= row + 1; rowToCheck++) {
+            for (let colToCheck = column - 1; colToCheck <= column + 1; colToCheck++) {
+                if (this.cellIsWithinGrid(rowToCheck, colToCheck)) {
+                    liveNeighbours += this.grid[rowToCheck][colToCheck];
+                }
+            }
+        }
+
+        liveNeighbours = liveNeighbours - cell;
+
+        return liveNeighbours;
+    }
+
+    cellIsWithinGrid(row, column) {
+        return row > -1 && column > -1 && row < this.height && column < this.width;
+    }
+
+    deadOrAlive(cell, liveNeighbours) {
+        if (cell === 0) {
+            return liveNeighbours === 3 ? 1 : 0;
+        }
+        if (cell === 1) {
+            return liveNeighbours === 2 || liveNeighbours === 3? 1 : 0;
+        }
+    }
+}
+
+
+
+module.exports = GameOfLife

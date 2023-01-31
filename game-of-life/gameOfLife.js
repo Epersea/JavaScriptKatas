@@ -25,8 +25,8 @@ class GameOfLife {
 
     createNewGrid() {
         const emptyGrid = this.createEmptyGrid();
-        const newGrid = this.fillGrid(emptyGrid);
-        return newGrid;
+        const filledGrid = this.fillGrid(emptyGrid);
+        return filledGrid;
     }
 
     createEmptyGrid() {
@@ -48,29 +48,31 @@ class GameOfLife {
 
     generateNewCell(row, column) {
         const currentCell = this.grid[row][column];
-        const liveNeighbours = this.calculateLiveNeighbours(currentCell, row, column);
+        const liveNeighbours = this.calculateLiveNeighbours(row, column);
         const newCell = this.deadOrAlive(currentCell, liveNeighbours);
         return newCell;
     }
 
-    calculateLiveNeighbours(cell, row, column) {
+    calculateLiveNeighbours(row, column) {
         let liveNeighbours = 0;
 
         for (let rowToCheck = row - 1; rowToCheck <= row + 1; rowToCheck++) {
             for (let colToCheck = column - 1; colToCheck <= column + 1; colToCheck++) {
-                if (this.cellIsWithinGrid(rowToCheck, colToCheck)) {
-                    liveNeighbours += this.grid[rowToCheck][colToCheck];
+                if (this.cellIsWithinGrid(rowToCheck, colToCheck) && this.cellIsANeighbour(rowToCheck, colToCheck, row, column)) {
+                        liveNeighbours += this.grid[rowToCheck][colToCheck]
                 }
             }
         }
-
-        liveNeighbours = liveNeighbours - cell;
 
         return liveNeighbours;
     }
 
     cellIsWithinGrid(row, column) {
         return row > -1 && column > -1 && row < this.height && column < this.width;
+    }
+
+    cellIsANeighbour(rowToCheck, colToCheck, row, column) {
+        return rowToCheck !== row || colToCheck !== column
     }
 
     deadOrAlive(cell, liveNeighbours) {

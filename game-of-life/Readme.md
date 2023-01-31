@@ -22,4 +22,4 @@ For more background about the problem, please check its Wikipedia page [here](ht
 
 - In each method, I tried to make the code readable and semantic, using explainer functions were needed.
 
-- I used Mocha as my test suite.
+- I used Mocha as my test suite. Since this library does not include array comparisons natively, I implemented a custom funcion in my test suite to be able to compare bi-dimensional arrays by flattening them and comparing each element.

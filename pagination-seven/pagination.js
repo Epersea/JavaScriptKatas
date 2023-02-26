@@ -1,11 +1,12 @@
 class Pagination {
+
+    pages = [];
+    ellipsis = '...';
+
     constructor(totalPages, currentPage) {
         this.totalPages = totalPages;
         this.currentPage = currentPage;
     }
-
-    pages = [];
-    ellipsis = '...';
 
     pagination() {
         if (this.totalPages <= 7) {
@@ -14,7 +15,7 @@ class Pagination {
             this.includeSelectedElements();
         }
         this.markCurrentPage();
-        return this.pages;
+        return this.pages.join(' ');
     }
 
     includeAllElements() {
@@ -70,11 +71,16 @@ class Pagination {
     }
 
     markCurrentPage() {
-        this.pages = this.pages.join(' ')
-        this.pages = this.pages.replace(`${this.currentPage}`, `(${this.currentPage})`)
+        this.pages = this.pages.map((element) => {
+            return element === this.currentPage? element = `(${this.currentPage})` : element;
+        })
     }
 
 }
+
+const pageMaker = new Pagination(7, 3);
+const sevenPages = pageMaker.pagination();
+console.log(sevenPages);
 
 
 module.exports = Pagination;

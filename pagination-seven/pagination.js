@@ -4,63 +4,44 @@ class Pagination {
         this.currentPage = currentPage;
     }
 
+    pages = [];
+    ellipsis = '...';
+
     pagination() {
         if (this.totalPages <= 7) {
-            return this.paginateSevenOrLess();
+            this.includeAllElements();
         } else {
-            return this.paginateMoreThanSeven();
+            this.includeSelectedElements();
         }
+        this.markCurrentPage();
+        return this.pages;
     }
 
-    paginateSevenOrLess() {
-        let pagination = '';
+    includeAllElements() {
         for (let i = 1; i <= this.totalPages; i++) {
-            if (i === this.currentPage) {
-                pagination += `(${i}) `;
-            } else {
-                pagination += `${i} `;
-            }
+            this.pages.push(i);
         }
-        return pagination.trim();
     }
 
-    paginateMoreThanSeven() {
+    includeSelectedElements() {
         if (this.currentPageIsAtBeginning()) {
-            let pagination = [];
-            pagination.push(1, 2, 3, 4, 5);
-            pagination.push('...');
-            pagination.push(this.totalPages);
-            pagination = pagination.join(' ');
-            pagination = pagination.replace(`${this.currentPage}`, `(${this.currentPage})`)
-            return pagination;
+            this.pages.push(1, 2, 3, 4, 5);
+            this.pages.push(this.ellipsis);
+            this.pages.push(this.totalPages);
         }
 
         if (this.currentPageIsInTheMiddle()) {
-            let pagination = [];
-            pagination.push(1);
-            pagination.push('...');
-            pagination.push(this.currentPage - 1);
-            pagination.push(this.currentPage);
-            pagination.push(this.currentPage + 1);
-            pagination.push('...');
-            pagination.push(this.totalPages);
-            pagination = pagination.join(' ');
-            pagination = pagination.replace(`${this.currentPage}`, `(${this.currentPage})`)
-            return pagination;
+            this.pages.push(1);
+            this.pages.push(this.ellipsis);
+            this.includeMiddlePages();
+            this.pages.push(this.ellipsis);
+            this.pages.push(this.totalPages);
         }
 
         if(this.currentPageIsAtTheEnd()) {
-            let pagination = [];
-            pagination.push(1);
-            pagination.push('...');
-            pagination.push(this.totalPages - 4);
-            pagination.push(this.totalPages - 3);
-            pagination.push(this.totalPages - 2);
-            pagination.push(this.totalPages - 1);
-            pagination.push(this.totalPages);
-            pagination = pagination.join(' ');
-            pagination = pagination.replace(`${this.currentPage}`, `(${this.currentPage})`)
-            return pagination;
+            this.pages.push(1);
+            this.pages.push(this.ellipsis);
+            this.includeLastPages()
         }
     }
 
@@ -75,6 +56,24 @@ class Pagination {
     currentPageIsInTheMiddle() {
         return !this.currentPageIsAtBeginning() && !this.currentPageIsAtTheEnd();
     }
+
+    includeMiddlePages() {
+        for (let i = this.currentPage - 1; i <= this.currentPage + 1; i++) {
+            this.pages.push(i)
+        }
+    }
+
+    includeLastPages() {
+        for (let i = this.totalPages - 4; i <= this.totalPages; i++) {
+            this.pages.push(i);
+        }
+    }
+
+    markCurrentPage() {
+        this.pages = this.pages.join(' ')
+        this.pages = this.pages.replace(`${this.currentPage}`, `(${this.currentPage})`)
+    }
+
 }
 
 

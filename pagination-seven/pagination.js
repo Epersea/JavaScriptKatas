@@ -25,37 +25,33 @@ class Pagination {
     }
 
     includeSelectedElements() {
-        if (this.currentPageIsAtBeginning()) {
+        if (this.currentPageIsAtTheBeginning()) {
             this.pages.push(1, 2, 3, 4, 5);
             this.pages.push(this.ellipsis);
             this.pages.push(this.totalPages);
         }
 
-        if (this.currentPageIsInTheMiddle()) {
+        else if(this.currentPageIsAtTheEnd()) {
+            this.pages.push(1);
+            this.pages.push(this.ellipsis);
+            this.includeLastPages()
+        }
+
+        else {
             this.pages.push(1);
             this.pages.push(this.ellipsis);
             this.includeMiddlePages();
             this.pages.push(this.ellipsis);
             this.pages.push(this.totalPages);
         }
-
-        if(this.currentPageIsAtTheEnd()) {
-            this.pages.push(1);
-            this.pages.push(this.ellipsis);
-            this.includeLastPages()
-        }
     }
 
-    currentPageIsAtBeginning() {
+    currentPageIsAtTheBeginning() {
         return this.currentPage < 5;
     }
 
     currentPageIsAtTheEnd() {
-        return this.currentPage > this.totalPages - 5;
-    }
-
-    currentPageIsInTheMiddle() {
-        return !this.currentPageIsAtBeginning() && !this.currentPageIsAtTheEnd();
+        return this.currentPage > this.totalPages - 4;
     }
 
     includeMiddlePages() {
@@ -77,10 +73,5 @@ class Pagination {
     }
 
 }
-
-const pageMaker = new Pagination(7, 3);
-const sevenPages = pageMaker.pagination();
-console.log(sevenPages);
-
 
 module.exports = Pagination;

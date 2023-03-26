@@ -32,8 +32,7 @@ describe('Poker Hands', () => {
 
             const handStats = {
                 type: 'straight flush',
-                rank: 9,
-                tie: [6,5,4,3,2]
+                rank: 9
             }
             assert.equal(JSON.stringify(handClassification), JSON.stringify(handStats))
 
@@ -47,8 +46,7 @@ describe('Poker Hands', () => {
 
             const handStats = {
                 type: 'four of a kind',
-                rank: 8,
-                tie: [8,6]
+                rank: 8
             }
             assert.equal(JSON.stringify(handClassification), JSON.stringify(handStats))
         })
@@ -61,8 +59,7 @@ describe('Poker Hands', () => {
 
             const handStats = {
                 type: 'full house',
-                rank: 7,
-                tie: [8, 14]
+                rank: 7
             }
             assert.equal(JSON.stringify(handClassification), JSON.stringify(handStats))
         })
@@ -75,8 +72,7 @@ describe('Poker Hands', () => {
 
             const handStats = {
                 type: 'flush',
-                rank: 6,
-                tie: [14,9,8,7,2]
+                rank: 6
             }
             assert.equal(JSON.stringify(handClassification), JSON.stringify(handStats))
         })
@@ -89,8 +85,7 @@ describe('Poker Hands', () => {
 
             const handStats = {
                 type: 'straight',
-                rank: 5,
-                tie: [6,5,4,3,2]
+                rank: 5
             }
             assert.equal(JSON.stringify(handClassification), JSON.stringify(handStats))
         })
@@ -103,8 +98,7 @@ describe('Poker Hands', () => {
 
             const handStats = {
                 type: 'three of a kind',
-                rank: 4,
-                tie: [8, 14, 12]
+                rank: 4
             }
             assert.equal(JSON.stringify(handClassification), JSON.stringify(handStats))
         })
@@ -117,8 +111,7 @@ describe('Poker Hands', () => {
 
             const handStats = {
                 type: 'two pairs',
-                rank: 3,
-                tie: [12, 8, 14]
+                rank: 3
             }
             assert.equal(JSON.stringify(handClassification), JSON.stringify(handStats))
         })
@@ -131,8 +124,7 @@ describe('Poker Hands', () => {
 
             const handStats = {
                 type: 'pair',
-                rank: 2,
-                tie: [8, 14, 12, 6]
+                rank: 2
             }
             assert.equal(JSON.stringify(handClassification), JSON.stringify(handStats))
         })
@@ -145,10 +137,40 @@ describe('Poker Hands', () => {
 
             const handStats = {
                 type: 'high card',
-                rank: 1,
-                tie: [13, 9, 5, 3, 2]
+                rank: 1
             }
             assert.equal(JSON.stringify(handClassification), JSON.stringify(handStats))
+        })
+    })
+
+    describe('Winner selection', () => {
+        it('Finds winner when rankings differ - Black wins', () => {
+            const game = new PokerHands('Black: 2S 5S 3S 4S 6S  White: 8S 8D QH 6C AS')
+
+            const winner = game.findWinner()
+
+            assert.equal(winner, 'Black wins with straight flush.')
+        })
+        it('Finds winner when rankings differ - White wins', () => {
+            const game = new PokerHands('Black: 2H 3D 5S 9C KD  White: 8S 8D QH 6C AS')
+
+            const winner = game.findWinner()
+
+            assert.equal(winner, 'White wins with pair.')
+        })
+        it('Finds winner when there is a tie', () => {
+            const game = new PokerHands('Black: 2H 3D 5S 9C KD  White: 2C 3H 4S 8C AH')
+
+            const winner = game.findWinner()
+
+            assert.equal(winner, 'White wins with high card.')
+        })
+        it('Declares tie when there is one', () => {
+            const game = new PokerHands('Black: 2H 3D 5S 9C KD  White: 2D 3H 5C 9S KH')
+
+            const winner = game.findWinner()
+
+            assert.equal(winner, "It's a tie! Both players have high card.")
         })
     })
     

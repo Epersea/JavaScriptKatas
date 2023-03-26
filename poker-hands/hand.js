@@ -13,128 +13,118 @@ class Hand {
 
     classifyHand() {
 
-        const cardsByValue = this.groupCardsByValue()
-        const tie = this.findTieCriteria(cardsByValue)
-
-        const straightFlush = this.isStraightFlush(tie)
+        const straightFlush = this.isStraightFlush()
         if (straightFlush) return straightFlush
 
-        const fourOfAKind = this.isFourOfAKind(cardsByValue, tie)
+        const cardsByValue = this.groupCardsByValue()
+
+        const fourOfAKind = this.isFourOfAKind(cardsByValue)
         if (fourOfAKind) return fourOfAKind
 
-        const fullHouse = this.isFullHouse(cardsByValue, tie)
+        const fullHouse = this.isFullHouse(cardsByValue)
         if (fullHouse) return fullHouse
 
-        const flush = this.isFlush(tie)
+        const flush = this.isFlush()
         if (flush) return flush
        
-        const straight = this.isStraight(tie)
+        const straight = this.isStraight()
         if (straight) return straight
 
-        const threeOfAKind = this.isThreeOfAKind(cardsByValue, tie)
+        const threeOfAKind = this.isThreeOfAKind(cardsByValue)
         if (threeOfAKind) return threeOfAKind
 
-        const twoPairs = this.isTwoPairs(cardsByValue, tie)
+        const twoPairs = this.isTwoPairs(cardsByValue)
         if (twoPairs) return twoPairs
 
-        const pair = this.isPair(cardsByValue, tie)
+        const pair = this.isPair(cardsByValue)
         if (pair) return pair
 
-        const highCard = this.isHighCard(tie)
+        const highCard = this.isHighCard()
         return highCard
     }
 
-    isStraightFlush(tie) {
+    isStraightFlush() {
         if (this.sameSuit() && this.consecutiveValues()) {
             return {
                 type: 'straight flush',
                 rank: 9,
-                tie: tie
             }
         }
     }
 
-    isFourOfAKind(cardsByValue, tie) {
+    isFourOfAKind(cardsByValue) {
         const numberOfcardsByValue = Object.values(cardsByValue)
         if (numberOfcardsByValue.includes(4)) {
             return {
                 type: 'four of a kind',
-                rank: 8,
-                tie: tie
+                rank: 8
             }
         }
     }
 
-    isFullHouse(cardsByValue, tie) {
+    isFullHouse(cardsByValue) {
         const numberOfcardsByValue = Object.values(cardsByValue)
         if (numberOfcardsByValue.includes(3) && numberOfcardsByValue.includes(2)) {
             return {
                 type: 'full house',
-                rank: 7,
-                tie: tie
+                rank: 7
             }
         }
     }
 
-    isFlush(tie) {
+    isFlush() {
         if (this.sameSuit() && !this.consecutiveValues()) {
             return {
                 type: 'flush',
-                rank: 6,
-                tie: tie
+                rank: 6
             }
         }
     }
 
-    isStraight(tie) {
+    isStraight() {
         if (!this.sameSuit() && this.consecutiveValues()) {
             return {
                 type: 'straight',
-                rank: 5,
-                tie: tie
+                rank: 5
             }
         }
     }
 
-    isThreeOfAKind(cardsByValue, tie) {
+    isThreeOfAKind(cardsByValue) {
         const numberOfcardsByValue = Object.values(cardsByValue)
         if (numberOfcardsByValue.includes(3) && !numberOfcardsByValue.includes(2)) {
             return {
                 type: 'three of a kind',
-                rank: 4,
-                tie: tie
+                rank: 4
             }
         }
     }
 
-    isTwoPairs(cardsByValue, tie) {
+    isTwoPairs(cardsByValue) {
         const numberOfcardsByFrequency = Object.values(cardsByValue)
         const cardsOrderedByFrequency = numberOfcardsByFrequency.sort((a, b) => b - a)
         if (JSON.stringify(cardsOrderedByFrequency) === JSON.stringify([2, 2, 1])) {
             return {
                 type: 'two pairs',
-                rank: 3,
-                tie: tie
+                rank: 3
             }
         }
     }
 
-    isPair(cardsByValue, tie) {
+    isPair(cardsByValue) {
         const numberOfcardsByValue = Object.values(cardsByValue)
         if (numberOfcardsByValue.includes(2)) {
             return {
                 type: 'pair',
-                rank: 2,
-                tie: tie
+                rank: 2
             }
         }
     }
 
-    isHighCard(tie) {
+    isHighCard() {
         return {
             type: 'high card',
-            rank: 1,
-            tie: tie
+            rank: 1
         }
     }
 
@@ -173,13 +163,15 @@ class Hand {
                 allValues.push(card[0])
             }
         }
+
         let counts = {}
         allValues.forEach(e => counts[e] ? counts[e]++ : counts[e] = 1)
 
         return counts
     }
 
-    findTieCriteria(cardsByValue) {
+    getTieCriteria() {
+        const cardsByValue = this.groupCardsByValue()
         const orderedValues = []
         const allEntries = Object.entries(cardsByValue)
 

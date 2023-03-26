@@ -179,12 +179,14 @@ class Hand {
         if(indexOfQuartet !== -1) {
             orderedValues.push(Number(allEntries[indexOfQuartet][0]))
             allEntries.splice(indexOfQuartet, 1)
+            return
         }
 
         const indexOfTrio = allEntries.findIndex(element => element[1] === 3)
         if(indexOfTrio !== -1) {
             orderedValues.push(Number(allEntries[indexOfTrio][0]))
             allEntries.splice(indexOfTrio, 1)
+            return
         }
 
         let pairValues = []

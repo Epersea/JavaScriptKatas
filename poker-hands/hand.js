@@ -142,7 +142,11 @@ class Hand {
     consecutiveValues() {
         let allValues = []
         for (let card of this.hand) {
-            allValues.push(card[0])
+            if (card[0] in this.cardValues) {
+                allValues.push(this.cardValues[card[0]])
+            } else {
+                allValues.push(card[0])
+            }
         }
         allValues = allValues.sort((a, b) => a - b)
         for (let i = 1; i < allValues.length; i++) {
@@ -179,14 +183,14 @@ class Hand {
         if(indexOfQuartet !== -1) {
             orderedValues.push(Number(allEntries[indexOfQuartet][0]))
             allEntries.splice(indexOfQuartet, 1)
-            return
+            return orderedValues
         }
 
         const indexOfTrio = allEntries.findIndex(element => element[1] === 3)
         if(indexOfTrio !== -1) {
             orderedValues.push(Number(allEntries[indexOfTrio][0]))
             allEntries.splice(indexOfTrio, 1)
-            return
+            return orderedValues
         }
 
         let pairValues = []
